@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:peersync/form/forget_password.form.dart';
 import 'package:peersync/form/login.form.dart';
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+class ForgotPasswordPage extends StatelessWidget {
+  const ForgotPasswordPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -50,13 +51,13 @@ class LoginPage extends StatelessWidget {
                     ),
                     TextButton(
                       onPressed: () {
-                        Navigator.of(context).pushNamed('/signup');
+                        Navigator.of(context).pushNamed('/login');
                       },
                       style: ElevatedButton.styleFrom(
                         // backgroundColor: Theme.of(context).shadowColor,
                         foregroundColor: Colors.white,
                       ),
-                      child: const Text('No account? Sign up'),
+                      child: const Text('Return to Login'),
                     ),
                   ],
                 )),

@@ -11,11 +11,10 @@ class LoginPage extends StatelessWidget {
           title: const Text('PeerSync'),
         ),
         body: Center(
-            child: SingleChildScrollView(
-          child: Expanded(
-              child: SizedBox(
-            width: 400.0,
-            height: 500.0,
+            child: SizedBox(
+          width: 400.0,
+          height: 520.0,
+          child: SingleChildScrollView(
             child: Card(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(
@@ -44,7 +43,9 @@ class LoginPage extends StatelessWidget {
                     const SizedBox(
                       height: 20,
                     ),
-                    LoginForm(),
+                    LoginForm(
+                        navigateToDashboard: () =>
+                            {Navigator.pushNamed(context, '/dashboard')}),
                     const SizedBox(
                       height: 15.0,
                     ),
@@ -58,9 +59,12 @@ class LoginPage extends StatelessWidget {
                       ),
                       child: const Text('No account? Sign up'),
                     ),
+                    const SizedBox(
+                      height: 12.0,
+                    )
                   ],
                 )),
-          )),
+          ),
         )));
   }
 }

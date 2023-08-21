@@ -38,9 +38,10 @@ dependencies:
   socket_io_client: ^2.0.2
   omni_jitsi_meet: ^1.0.14 
   reactive_forms: ^16.0.2
-  hooks_riverpod: ^2.3.6
-  flutter_hooks: ^0.18.0
-  flutter_riverpod:
+  hooks_riverpod: ^2.3.7
+  http: ^1.1.0
+  # flutter_hooks: ^0.20.0
+  
 
 
 dev_dependencies:

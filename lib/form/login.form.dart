@@ -1,15 +1,24 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:http/http.dart' as http;
 import 'package:peersync/widgets/plain_rounded_textfield.dart';
 import 'package:peersync/widgets/submit_button.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
-class LoginForm extends HookWidget {
+import '../constants.dart';
+import '../model/user.dart';
+import '../providers/provider.dart';
+
+class LoginForm extends HookConsumerWidget {
   final FormGroup form;
-  LoginForm({super.key}) : form = createForm();
+  final VoidCallback navigateToDashboard;
+  LoginForm({required this.navigateToDashboard, super.key})
+      : form = createForm();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return ReactiveForm(
       formGroup: form,
       child: Padding(
@@ -55,10 +64,7 @@ class LoginForm extends HookWidget {
               ),
             ],
           ),
-          SubmitForm(
-            title: 'Login',
-            onPressed: _submitForm,
-          ),
+          SubmitForm(title: 'Login', onPressed: () => _submitForm(ref)),
         ]),
       ),
     );
@@ -77,15 +83,38 @@ class LoginForm extends HookWidget {
     });
   }
 
-  void _submitForm() {
+  void _submitForm(WidgetRef ref) async {
     if (form.valid) {
-      // Implement your login logic here
-      // You can access the form values using form.value
-      // For example:
-      // final email = form.value['email'];
-      // final password = form.value['password'];
+      try {
+        var url = Uri.parse('$api/account/signin');
+        var response = await http.post(url, body: form.value);
+        print('body: ${response.statusCode}');
+        if (response.statusCode == 200) {
+          var body = jsonDecode(response.body);
 
-      print('Login form is valid!');
+          // debugPrint('workspace: $body');
+          var user = body['user'];
+          var token = body['access_token'];
+
+          debugPrint('user: $user');
+          debugPrint('access_token: $token');
+
+          ref.read(tokenProvider.notifier).state = token;
+          ref.read(userProvider.notifier).state = User(
+              name: user['name'].toString(),
+              email: user['email'],
+              workspaces: user['workspaces'],
+              createdAt: DateTime.parse(user['createdAt']),
+              updatedAt: DateTime.parse(user['updatedAt']),
+              id: user['id']); //body['user'];
+
+          navigateToDashboard();
+        } else {
+          debugPrint('status code: ${response.statusCode}');
+        }
+      } catch (e) {
+        debugPrint("Error in sign in ${e.toString()}");
+      }
     }
   }
 }

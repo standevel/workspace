@@ -23,7 +23,7 @@ class SubmitForm extends StatelessWidget {
       child: ElevatedButton(
         onPressed: form!.valid ? onPressed : null,
         style: ElevatedButton.styleFrom(
-          // backgroundColor: Theme.of(context).shadowColor,
+          backgroundColor: Theme.of(context).shadowColor,
           foregroundColor: Colors.white,
           padding: const EdgeInsets.symmetric(
               horizontal: 30.0,

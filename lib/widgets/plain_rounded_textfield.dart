@@ -10,7 +10,7 @@ class RoundedPlainTextField extends StatelessWidget {
   final String? formControlName;
   final bool? obscureText;
   final FormControl? formControl;
-
+  final String? value;
   final String? labelText;
   final Color? color;
   final TextStyle? labelStyle;
@@ -30,6 +30,7 @@ class RoundedPlainTextField extends StatelessWidget {
       this.labelStyle = const TextStyle(color: Colors.white),
       this.hintStyle = const TextStyle(color: Colors.white),
       this.labelText,
+      this.value = '',
       this.obscureText = false})
       : super(key: key);
 

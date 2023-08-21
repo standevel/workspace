@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:peersync/constants.dart';
 
+import '../../utils/responsive.utils.dart';
+
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
@@ -27,7 +29,7 @@ class MobileView extends StatelessWidget {
         height: 8.0,
       ),
       const Image(
-        image: AssetImage('/images/peersync.png'),
+        image: AssetImage('images/peersync.png'),
         // width: 100.0,
         // height: 100.0,
         fit: BoxFit.fitHeight,
@@ -48,7 +50,7 @@ class MobileView extends StatelessWidget {
             height: 40,
           ),
           const Image(
-            image: AssetImage('/images/call2.jpg'),
+            image: AssetImage('images/call2.jpg'),
             // height: 300.0,
             fit: BoxFit.fitHeight,
           ),
@@ -124,7 +126,7 @@ class DesktopView extends StatelessWidget {
         Row(
           children: [
             const Image(
-              image: AssetImage('/images/peersync.png'),
+              image: AssetImage('images/peersync.png'),
               // width: 100.0,
               height: 100.0,
               fit: BoxFit.fitHeight,
@@ -192,7 +194,7 @@ class DesktopView extends StatelessWidget {
               ),
               const Expanded(
                 child: Image(
-                  image: AssetImage('/images/call2.jpg'),
+                  image: AssetImage('images/call2.jpg'),
                   height: 300.0,
                   fit: BoxFit.fitHeight,
                 ),

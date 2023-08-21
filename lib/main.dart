@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:peersync/app_router.dart';
+import 'package:peersync/pages/desktop/home.page.dart';
+import 'package:peersync/pages/mobile/conpany_signup.dart';
+import 'package:peersync/pages/mobile/individual_signup.page.dart';
+import 'package:peersync/pages/mobile/login.page.dart';
+import 'package:peersync/pages/mobile/signup.page.dart';
+import 'package:peersync/pages/mobile/workspace.page.dart';
+
+import 'pages/mobile/dashboard.page.dart';
 
 void main() {
   runApp(ProviderScope(child: MyApp()));
@@ -16,7 +23,16 @@ class MyApp extends StatelessWidget {
       theme: darkTheme,
       title: 'Peer Sync',
       initialRoute: '/',
-      onGenerateRoute: AppRouter.generateRoute,
+      routes: {
+        '/': (context) => const HomePage(),
+        '/signup': (context) => const SignupPage(),
+        '/company-signup': (context) => const CompanySignUpPage(),
+        '/personal-signup': (context) => const IndividualSignUpPage(),
+        '/login': (context) => const LoginPage(),
+        '/create-workspace': (context) => const CreateWorkspacePage(),
+        "/dashboard": (context) => const DashboardPage()
+        // Add other named routes for your pages here...
+      },
     );
   }
 

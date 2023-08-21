@@ -1,9 +1,3 @@
 import 'package:flutter/material.dart';
 
-class ResponsiveUtils {
-  static const double kMobileMaxWidth = 600.0;
-
-  static bool isMobile(BuildContext context) {
-    return MediaQuery.of(context).size.width < kMobileMaxWidth;
-  }
-}
+const api = 'http://192.168.0.152:3000/api/v1';

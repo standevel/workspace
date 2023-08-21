@@ -11,7 +11,7 @@ class ForgetPasswordForm extends HookWidget {
       Validators.email,
     ]),
   });
-  ForgetPasswordForm({super.key}) 
+  ForgetPasswordForm({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,7 @@ class ForgetPasswordForm extends HookWidget {
             hintText: 'Enter your email',
             icon: Icons.email,
           ),
-            Row(
+          Row(
             children: [
               const Expanded(
                 child: Text(''),
@@ -44,7 +44,7 @@ class ForgetPasswordForm extends HookWidget {
                   // backgroundColor: Theme.of(context).shadowColor,
                   foregroundColor: Colors.white,
                 ),
-                child:  Text('Back to Login'),
+                child: const Text('Back to Login'),
               ),
             ],
           ),
@@ -56,8 +56,6 @@ class ForgetPasswordForm extends HookWidget {
       ),
     );
   }
-
- 
 
   void _submitForm() {
     if (form.valid) {
