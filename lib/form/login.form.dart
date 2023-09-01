@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -6,10 +8,12 @@ import 'package:http/http.dart' as http;
 import 'package:peersync/widgets/plain_rounded_textfield.dart';
 import 'package:peersync/widgets/submit_button.dart';
 import 'package:reactive_forms/reactive_forms.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../constants.dart';
 import '../model/user.dart';
 import '../providers/provider.dart';
+import '../widgets/custom-snackbar.dart';
 
 class LoginForm extends HookConsumerWidget {
   final FormGroup form;
@@ -19,6 +23,7 @@ class LoginForm extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    var isProcessing = ref.watch(loadingProvider);
     return ReactiveForm(
       formGroup: form,
       child: Padding(
@@ -64,7 +69,12 @@ class LoginForm extends HookConsumerWidget {
               ),
             ],
           ),
-          SubmitForm(title: 'Login', onPressed: () => _submitForm(ref)),
+          SubmitForm(
+              title: 'Login', onPressed: () => _submitForm(context, ref)),
+          if (isProcessing)
+            const CircularProgressIndicator(
+              color: white,
+            )
         ]),
       ),
     );
@@ -83,9 +93,10 @@ class LoginForm extends HookConsumerWidget {
     });
   }
 
-  void _submitForm(WidgetRef ref) async {
+  void _submitForm(BuildContext context, WidgetRef ref) async {
     if (form.valid) {
       try {
+        ref.watch(loadingProvider.notifier).state = true;
         var url = Uri.parse('$api/account/signin');
         var response = await http.post(url, body: form.value);
         print('body: ${response.statusCode}');
@@ -99,21 +110,72 @@ class LoginForm extends HookConsumerWidget {
           debugPrint('user: $user');
           debugPrint('access_token: $token');
 
+          // CherryToast.info(
+          //   title: const Text('login successful'),
+          //   description: const Text(
+          //       'login successful. We are redirecting you to dashboard'),
+          //   actionHandler: () {},
+          // ).show(context);
+
           ref.read(tokenProvider.notifier).state = token;
           ref.read(userProvider.notifier).state = User(
-              name: user['name'].toString(),
+              firstName: user['firstName'].toString(),
+              lastName: user['lastName'].toString(),
               email: user['email'],
               workspaces: user['workspaces'],
               createdAt: DateTime.parse(user['createdAt']),
               updatedAt: DateTime.parse(user['updatedAt']),
               id: user['id']); //body['user'];
+          ScaffoldMessenger.of(context).showSnackBar(
+            CustomSnackBar(
+              message: 'Authorized!',
+              iconData: Icons.info, // Specify the icon you want
+              onClose: () {
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+              },
+            ),
+          );
+          // Obtain shared preferences.
+          final SharedPreferences prefs = await SharedPreferences.getInstance();
+          prefs.setString(tokenName, token);
 
           navigateToDashboard();
         } else {
           debugPrint('status code: ${response.statusCode}');
+          // var snackBar = response.statusCode == 401
+          //     ? const SnackBar(
+          //         showCloseIcon: true,
+          //         content: Text('Invalid email or password!'),
+          //         duration: Duration(
+          //             seconds: 3), // Control how long the snackbar is displayed
+          //       )
+          //     : const SnackBar(
+          //         content: Text('Login Failed!'),
+          //         duration: Duration(
+          //             seconds: 3), // Control how long the snackbar is displayed
+          //       );
+          // ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            CustomSnackBar(
+              message: 'Authorization failed! Invalid email or password',
+              iconData: Icons.info, // Specify the icon you want
+              onClose: () {
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+              },
+            ),
+          );
+          ref.read(loadingProvider.notifier).state = false;
         }
       } catch (e) {
         debugPrint("Error in sign in ${e.toString()}");
+        ref.read(loadingProvider.notifier).state = false;
+        // const snackBar = SnackBar(
+        //   content: Text( 'Login Failed!'),
+        //   duration: Duration(
+        //       seconds: 3), // Control how long the snackbar is displayed
+        // );
+        // ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
     }
   }

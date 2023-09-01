@@ -35,8 +35,8 @@ class CreateWorkspacePage extends HookWidget {
                 height: 16.0,
               ),
               CreateWorkspaceForm(
-                navigateToDashboard: () =>
-                    Navigator.pushNamed(context, '/dashboard'),
+                navigateToInviteTeammate: () =>
+                    Navigator.pushNamed(context, '/invite-teammates'),
               )
             ],
           ),

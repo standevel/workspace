@@ -6,19 +6,21 @@ import 'package:peersync/widgets/plain_rounded_textfield.dart';
 import 'package:peersync/widgets/submit_button.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
+import '../constants.dart';
 import '../providers/provider.dart';
 import '../utils/header_with_token.utils.dart';
 
 class CreateWorkspaceForm extends ConsumerWidget {
-  final VoidCallback navigateToDashboard;
-  const CreateWorkspaceForm({super.key, required this.navigateToDashboard});
+  final VoidCallback navigateToInviteTeammate;
+  const CreateWorkspaceForm(
+      {super.key, required this.navigateToInviteTeammate});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var workspace = ref.read(workspaceProvider);
     var form = createForm(workspace);
     debugPrint('workspace: $workspace');
-
+    var isProcessing = ref.watch(loadingProvider);
     return ReactiveForm(
       formGroup: form,
       child: Padding(
@@ -101,6 +103,10 @@ class CreateWorkspaceForm extends ConsumerWidget {
               onPressed: () => _submitForm(context, ref, form),
               title: 'Create Workspace',
             ),
+            if (isProcessing)
+              const CircularProgressIndicator(
+                color: white,
+              )
           ],
         ),
       ),
@@ -110,7 +116,7 @@ class CreateWorkspaceForm extends ConsumerWidget {
   FormGroup createForm(dynamic workspace) {
     return fb.group({
       'workspace': FormControl<String>(
-        value: workspace.workspace.toString(),
+        value: workspace?.workspace?.toString(),
         validators: [Validators.required],
       ),
       // 'description': FormControl<String>(validators: [Validators.required]),
@@ -121,7 +127,12 @@ class CreateWorkspaceForm extends ConsumerWidget {
   }
 
   void _submitForm(BuildContext context, WidgetRef ref, FormGroup form) async {
+    ref.read(loadingProvider.notifier).state = true;
     var token = ref.read(tokenProvider);
+    if (token == '' || token == 'null') {
+      token = await checkUserToken();
+      debugPrint('token from provider inner $token');
+    }
     var workspace = ref.read(workspaceProvider);
     debugPrint('token from provider $token');
     final httpClient = CustomHttpClient(bearerToken: token);
@@ -143,12 +154,15 @@ class CreateWorkspaceForm extends ConsumerWidget {
         if (response.statusCode == 201) {
           var body = jsonEncode(response.body);
           debugPrint('workspace: $body');
-          navigateToDashboard();
+          ref.read(loadingProvider.notifier).state = false;
+          navigateToInviteTeammate();
         } else {
           debugPrint('status code: ${response.statusCode}');
+          ref.read(loadingProvider.notifier).state = false;
         }
       } catch (e) {
         debugPrint("Error creating workspace ${e.toString()}");
+        ref.read(loadingProvider.notifier).state = false;
       }
     }
   }

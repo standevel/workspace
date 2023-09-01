@@ -7,6 +7,7 @@ import 'package:peersync/constants.dart';
 import 'package:peersync/widgets/plain_rounded_textfield.dart';
 import 'package:peersync/widgets/submit_button.dart';
 import 'package:reactive_forms/reactive_forms.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../model/user.dart';
 import '../providers/provider.dart';
@@ -42,11 +43,24 @@ class UserForm extends ConsumerWidget {
         child: Column(
           children: [
             RoundedPlainTextField(
-              formControlName: 'name',
-              labelText: 'Your Name',
-              hintText: "Enter your name",
+              formControlName: 'firstName',
+              labelText: 'Your first name',
+              hintText: "Enter your first name",
               validationMessages: {
-                ValidationMessage.required: (error) => 'Name is required.',
+                ValidationMessage.required: (error) =>
+                    'First Name is required.',
+              },
+              icon: Icons.house,
+              // labelStyle: TextStyle(color: Colors.blueGrey[800]),
+              // hintStyle: TextStyle(color: Colors.blueGrey[800]),
+              borderRadius: 26,
+            ),
+            RoundedPlainTextField(
+              formControlName: 'lastName',
+              labelText: 'Your last name',
+              hintText: "Enter your last name",
+              validationMessages: {
+                ValidationMessage.required: (error) => 'Last Name is required.',
               },
               icon: Icons.house,
               // labelStyle: TextStyle(color: Colors.blueGrey[800]),
@@ -75,8 +89,7 @@ class UserForm extends ConsumerWidget {
               obscureText: true,
               icon: Icons.password,
               validationMessages: {
-                ValidationMessage.required: (error) =>
-                    'Company password is required.',
+                ValidationMessage.required: (error) => 'password is required.',
                 ValidationMessage.minLength: (error) =>
                     'The password must be at least ${(error as Map)['requiredLength']} characters long'
               },
@@ -138,7 +151,8 @@ class UserForm extends ConsumerWidget {
   static createForm() {
     return fb.group(
       {
-        'name': FormControl<String>(validators: [Validators.required]),
+        'firstName': FormControl<String>(validators: [Validators.required]),
+        'lastName': FormControl<String>(validators: [Validators.required]),
         'email': FormControl<String>(
           validators: [
             Validators.required,
@@ -187,7 +201,8 @@ class UserForm extends ConsumerWidget {
           ref.read(errorProvider.notifier).state = body['message'].toString();
         }
         if (token != null) {
-          navigateToCreateWorkspace();
+          final SharedPreferences prefs = await SharedPreferences.getInstance();
+          prefs.setString(tokenName, token);
 
           ref.read(tokenProvider.notifier).state = token;
           var user = User(
@@ -199,8 +214,13 @@ class UserForm extends ConsumerWidget {
               // phone: '',
               // username:
               //     '${form.value['name'].toString().split(' ')[0]}_${form.value['name'].toString().split(' ')[1]}'
-              name: form.value['name'].toString());
+              lastName: form.value['lastName'].toString(),
+              firstName: form.value['firstName'].toString());
           ref.read(userProvider.notifier).state = user;
+          ref.read(loadingProvider.notifier).state = false;
+
+          navigateToCreateWorkspace();
+        } else {
           ref.read(loadingProvider.notifier).state = false;
         }
       }

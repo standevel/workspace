@@ -26,10 +26,7 @@ class UniqueEmailAsyncValidator extends AsyncValidator<dynamic> {
     try {
       // simple array that simulates emails stored in the Server DB.
       var url = Uri.parse('$api/account/check-email-exist?email=$email');
-      final headers = {
-        'User-Agent': 'PeerSync',
-        'Content-Type': 'application/json'
-      };
+      final headers = {'Content-Type': 'application/json'};
       var response = await http.get(url, headers: headers);
       // print('Response status: ${response.statusCode} ${response.body}');
       // var body = jsonDecode(response.body);

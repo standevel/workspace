@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:peersync/constants.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../utils/responsive.utils.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends HookConsumerWidget {
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
         body: SingleChildScrollView(
       child: ResponsiveUtils.isMobile(context)

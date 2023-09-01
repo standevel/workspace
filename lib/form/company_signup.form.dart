@@ -138,7 +138,8 @@ class CompanyForm extends HookConsumerWidget {
         if (user != null) {
           ref.read(userProvider.notifier).state = User(
               email: user['email'],
-              name: user['name'],
+              firstName: user['firstName'],
+              lastName: user['lastName'],
               id: user['id'],
               workspaces: user['workspaces']);
           navigateToCreateWorkspace();

@@ -6,10 +6,14 @@ import 'package:peersync/pages/mobile/individual_signup.page.dart';
 import 'package:peersync/pages/mobile/login.page.dart';
 import 'package:peersync/pages/mobile/signup.page.dart';
 import 'package:peersync/pages/mobile/workspace.page.dart';
+import 'package:peersync/pages/verify-email.page.dart';
 
+import 'pages/invite_teammates.page.dart';
 import 'pages/mobile/dashboard.page.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   runApp(ProviderScope(child: MyApp()));
 }
 
@@ -30,7 +34,9 @@ class MyApp extends StatelessWidget {
         '/personal-signup': (context) => const IndividualSignUpPage(),
         '/login': (context) => const LoginPage(),
         '/create-workspace': (context) => const CreateWorkspacePage(),
-        "/dashboard": (context) => const DashboardPage()
+        "/dashboard": (context) => const DashboardPage(),
+        "/verify-email": (context) => const VerifyEmailPage(),
+        "/invite-teammates": (context) => const InviteTeammatesPage()
         // Add other named routes for your pages here...
       },
     );
