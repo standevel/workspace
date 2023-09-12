@@ -51,7 +51,7 @@ class CompanySignUpMobileView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Image(
-                image: AssetImage('images/fotor.jpg'),
+                image: AssetImage('assets/images/fotor.jpg'),
                 fit: BoxFit.cover,
                 height: 200,
                 width: 400,

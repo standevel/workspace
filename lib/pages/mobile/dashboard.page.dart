@@ -12,7 +12,7 @@ class DashboardPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-        appBar: AppBar(title: const Text('Dashboard')),
+        appBar: AppBar(),
         drawer: const sideDrawer(),
         body: FutureBuilder<String>(
             future: checkUserToken(),

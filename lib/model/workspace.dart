@@ -3,14 +3,10 @@ class Workspace {
   final String companyId;
   final String description;
   final String createdBy;
+  final String logoUrl;
   final List<String> teams;
   final bool isCompnay;
 
-  Workspace(
-      {required this.workspace,
-      required this.teams,
-      required this.description,
-      required this.createdBy,
-      this.isCompnay = false,
-      this.companyId = ''});
+  Workspace(this.workspace, this.teams, this.description, this.createdBy,
+      this.logoUrl, this.isCompnay, this.companyId);
 }

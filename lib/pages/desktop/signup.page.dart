@@ -27,7 +27,7 @@ class IndividualSignUpDesktopView extends StatelessWidget {
                 const Expanded(
                   flex: 2,
                   child: Image(
-                    image: AssetImage('images/fotor.jpg'),
+                    image: AssetImage('assets/images/fotor.jpg'),
                     fit: BoxFit.cover,
                     height: 550,
                   ),

@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:isar/isar.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'entities/user.dart';
-import 'entities/workspace.dart';
 
 const api = 'https://workspace-api.onrender.com/api/v1';
 
@@ -14,9 +9,30 @@ const tokenName = 'peersync_user_token';
 Future<String> checkUserToken() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String userToken = prefs.getString(tokenName)!;
+  prefs.clear();
   return userToken;
 }
 
+Future<void> setLoggedIn(bool isLoggedIn) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setBool('isLoggedIn', isLoggedIn);
+}
+
+Future<dynamic> setUser(dynamic user) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setString('user', user.toString());
+}
+
+getUser() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  return prefs.get('user');
+}
+
+// Retrieving login status
+Future<bool> isLoggedIn() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  return prefs.getBool('isLoggedIn') ?? false;
+}
 // getDBInstance() async {
 //   final dir = await getApplicationDocumentsDirectory();
 //   Isar isar;

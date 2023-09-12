@@ -44,7 +44,7 @@ class SignUpDesktopView extends StatelessWidget {
               height: MediaQuery.sizeOf(context).height,
               width: MediaQuery.sizeOf(context).width * 0.5,
               child: const Image(
-                image: AssetImage('images/comm.jpg'),
+                image: AssetImage('assets/images/comm.jpg'),
                 // width: 100.0,
                 // height: 100.0,
                 fit: BoxFit.fitHeight,
@@ -61,14 +61,6 @@ class SignUpDesktopView extends StatelessWidget {
                   children: [
                     InkWell(
                       onTap: () {
-                        ref.read(workspaceProvider.notifier).state = Workspace(
-                            workspace: '',
-                            description: '',
-                            isCompnay: true,
-                            companyId: '',
-                            teams: [''],
-                            createdBy: '');
-
                         Navigator.of(context).pushNamed('/company-signup');
                       },
                       child: Card(
@@ -113,15 +105,6 @@ class SignUpDesktopView extends StatelessWidget {
                               ),
                               TextButton(
                                 onPressed: () {
-                                  ref.read(workspaceProvider.notifier).state =
-                                      Workspace(
-                                          workspace: '',
-                                          description: '',
-                                          isCompnay: true,
-                                          companyId: '',
-                                          teams: [''],
-                                          createdBy: '');
-
                                   Navigator.of(context)
                                       .pushNamed('/company-signup');
                                 },
@@ -136,14 +119,6 @@ class SignUpDesktopView extends StatelessWidget {
                     ),
                     InkWell(
                       onTap: () {
-                        ref.read(workspaceProvider.notifier).state = Workspace(
-                            workspace: '',
-                            description: '',
-                            isCompnay: false,
-                            companyId: '',
-                            teams: [''],
-                            createdBy: '');
-
                         Navigator.of(context).pushNamed('/personal-signup');
                       },
                       child: Card(
@@ -173,15 +148,6 @@ class SignUpDesktopView extends StatelessWidget {
                               ),
                               TextButton(
                                 onPressed: () {
-                                  ref.read(workspaceProvider.notifier).state =
-                                      Workspace(
-                                          workspace: '',
-                                          description: '',
-                                          isCompnay: false,
-                                          companyId: '',
-                                          teams: [''],
-                                          createdBy: '');
-
                                   Navigator.of(context)
                                       .pushNamed('/personal-signup');
                                 },
@@ -233,14 +199,6 @@ class SignUpMobileView extends StatelessWidget {
             children: [
               InkWell(
                 onTap: () {
-                  ref.read(workspaceProvider.notifier).state = Workspace(
-                      workspace: '',
-                      description: '',
-                      isCompnay: true,
-                      companyId: '',
-                      teams: [''],
-                      createdBy: '');
-
                   Navigator.of(context).pushNamed('/company-signup');
                 },
                 child: Card(
@@ -285,15 +243,6 @@ class SignUpMobileView extends StatelessWidget {
                         ),
                         TextButton(
                           onPressed: () {
-                            ref.read(workspaceProvider.notifier).state =
-                                Workspace(
-                                    workspace: '',
-                                    description: '',
-                                    isCompnay: true,
-                                    companyId: '',
-                                    teams: [''],
-                                    createdBy: '');
-
                             Navigator.of(context).pushNamed('/company-signup');
                           },
                           style: TextButton.styleFrom(
@@ -307,13 +256,6 @@ class SignUpMobileView extends StatelessWidget {
               ),
               InkWell(
                 onTap: () {
-                  ref.read(workspaceProvider.notifier).state = Workspace(
-                      workspace: '',
-                      description: '',
-                      isCompnay: false,
-                      companyId: '',
-                      teams: [''],
-                      createdBy: '');
                   Navigator.of(context).pushNamed('/personal-signup');
                 },
                 child: Card(
@@ -343,15 +285,6 @@ class SignUpMobileView extends StatelessWidget {
                         ),
                         TextButton(
                           onPressed: () {
-                            ref.read(workspaceProvider.notifier).state =
-                                Workspace(
-                                    workspace: '',
-                                    description: '',
-                                    isCompnay: false,
-                                    companyId: '',
-                                    teams: [''],
-                                    createdBy: '');
-
                             Navigator.of(context).pushNamed('/personal-signup');
                           },
                           style: TextButton.styleFrom(

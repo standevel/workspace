@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:peersync/constants.dart';
 
 import '../../utils/responsive.utils.dart';
 
@@ -9,11 +10,32 @@ class HomePage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-        body: SingleChildScrollView(
+        body:
+            // FutureBuilder<bool>(
+            //     future: isLoggedIn(),
+            //     builder: (context, snapshot) {
+            //       if (snapshot.connectionState == ConnectionState.waiting) {
+            //         return const Center(
+            //           child: CircularProgressIndicator(),
+            //         );
+            //       } else {
+            //         if (snapshot.hasData && snapshot.data != null) {
+            //           print('has data: ${snapshot.hasData}');
+            //           WidgetsBinding.instance.addPostFrameCallback((_) {
+            //             Navigator.pushNamed(context, '/dashboard');
+            //           });
+            //           return const Center(
+            //             child: Text('Redirecting to login...'),
+            //           );
+            //         } else {
+            SingleChildScrollView(
       child: ResponsiveUtils.isMobile(context)
           ? const MobileView()
           : const DesktopView(),
     ));
+    //     }
+    //   }
+    // }));
   }
 }
 
@@ -29,7 +51,7 @@ class MobileView extends StatelessWidget {
         height: 8.0,
       ),
       const Image(
-        image: AssetImage('images/peersync.png'),
+        image: AssetImage('assets/images/peersync.png'),
         // width: 100.0,
         // height: 100.0,
         fit: BoxFit.fitHeight,
@@ -50,7 +72,7 @@ class MobileView extends StatelessWidget {
             height: 40,
           ),
           const Image(
-            image: AssetImage('images/call2.jpg'),
+            image: AssetImage('assets/images/call2.jpg'),
             // height: 300.0,
             fit: BoxFit.fitHeight,
           ),
@@ -126,7 +148,7 @@ class DesktopView extends StatelessWidget {
         Row(
           children: [
             const Image(
-              image: AssetImage('images/peersync.png'),
+              image: AssetImage('assets/images/peersync.png'),
               // width: 100.0,
               height: 100.0,
               fit: BoxFit.fitHeight,
@@ -194,7 +216,7 @@ class DesktopView extends StatelessWidget {
               ),
               const Expanded(
                 child: Image(
-                  image: AssetImage('images/call2.jpg'),
+                  image: AssetImage('assets/images/call2.jpg'),
                   height: 300.0,
                   fit: BoxFit.fitHeight,
                 ),

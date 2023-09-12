@@ -10,44 +10,32 @@ import '../constants.dart';
 import '../providers/provider.dart';
 import '../utils/custom_httpclient.dart';
 
-class CreateWorkspaceForm extends ConsumerWidget {
-  final VoidCallback navigateToInviteTeammate;
-  const CreateWorkspaceForm(
-      {super.key, required this.navigateToInviteTeammate});
+class TeamMembersInviteForm extends ConsumerWidget {
+  final VoidCallback navigateToDashboard;
+  final String btnTitle;
+  const TeamMembersInviteForm(
+      {super.key, required this.btnTitle, required this.navigateToDashboard});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var workspace = ref.read(workspaceProvider);
     var form = createForm(workspace);
-    debugPrint('workspace: $workspace');
+    debugPrint('team members invite: $workspace');
     var isProcessing = ref.watch(loadingProvider);
+    (form.control('teammates') as FormArray<String>).add(FormControl<String>());
+    (form.control('teammates') as FormArray<String>).add(FormControl<String>());
+    (form.control('teammates') as FormArray<String>).add(FormControl<String>());
     return ReactiveForm(
       formGroup: form,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            RoundedPlainTextField(
-                formControlName: 'workspace',
-                value: workspace?.workspace.toString(),
-                // validationMessages: (control) => {
-                //   ValidationMessage.required: 'Workspace name is required.',
-                // },
-                borderRadius: 26,
-                labelText: 'Workspace Name',
-                hintText: 'Workspace or company name'),
-            // const SizedBox(height: 16),
-            // const RoundedPlainTextField(
-            //   formControlName: 'description',
-            //                   borderRadius: 26,
-            //   labelText: 'Description',
-            //   hintText: 'Description your workspace',
-            // ),
-            const Text('Add as many teams as you have',
+            const Text('Add as many teammates as possible',
                 style: TextStyle(
                     fontWeight: FontWeight.w300, color: Colors.white70)),
             ReactiveFormArray<String>(
-              formArrayName: 'teams',
+              formArrayName: 'teammates',
               builder: (context, formArray, child) {
                 return Column(
                   children: formArray.controls.map((control) {
@@ -55,11 +43,11 @@ class CreateWorkspaceForm extends ConsumerWidget {
                       children: [
                         Expanded(
                           child: RoundedPlainTextField(
-                            hintText: 'Enter team name',
+                            hintText: 'Enter teammate company email',
                             formControl: control as FormControl<String>,
                             validationMessages: {
                               ValidationMessage.required: (contro) =>
-                                  'This field is required',
+                                  'This teammate email is required',
                             },
                           ),
                         ),
@@ -80,9 +68,9 @@ class CreateWorkspaceForm extends ConsumerWidget {
                 const Expanded(child: Text('')),
                 TextButton(
                   onPressed: () {
-                    print('add team clicked');
+                    print('add teammate clicked');
 
-                    (form.control('teams') as FormArray<String>)
+                    (form.control('teammates') as FormArray<String>)
                         .add(FormControl<String>());
                   },
                   style: TextButton.styleFrom(foregroundColor: Colors.white),
@@ -92,7 +80,7 @@ class CreateWorkspaceForm extends ConsumerWidget {
                       SizedBox(
                         width: 4.0,
                       ),
-                      Text('Add Team'),
+                      Text('Add Teammate'),
                     ],
                   ),
                 ),
@@ -101,7 +89,7 @@ class CreateWorkspaceForm extends ConsumerWidget {
             const SizedBox(height: 16),
             SubmitForm(
               onPressed: () => _submitForm(context, ref, form),
-              title: 'Create Workspace',
+              title: btnTitle,
             ),
             if (isProcessing)
               const CircularProgressIndicator(
@@ -115,14 +103,7 @@ class CreateWorkspaceForm extends ConsumerWidget {
 
   FormGroup createForm(dynamic workspace) {
     return fb.group({
-      'workspace': FormControl<String>(
-        value: workspace?.workspace?.toString(),
-        validators: [Validators.required],
-      ),
-      // 'description': FormControl<String>(validators: [Validators.required]),
-      'teams': FormArray<String>([], validators: [Validators.minLength(1)]),
-      'logo': FormControl<String>(),
-      'isCompany': FormControl<bool>(value: false),
+      'teammates': FormArray<String>([], validators: [Validators.minLength(1)]),
     });
   }
 
@@ -133,7 +114,7 @@ class CreateWorkspaceForm extends ConsumerWidget {
       token = await checkUserToken();
       debugPrint('token from provider inner $token');
     }
-    var workspace = ref.read(workspaceProvider);
+    // var workspace = ref.read(workspaceProvider);
     debugPrint('token from provider $token');
     final httpClient = CustomHttpClient(bearerToken: token);
 
@@ -147,21 +128,21 @@ class CreateWorkspaceForm extends ConsumerWidget {
       // var url = Uri.parse('$api/workspace');
       try {
         var response = await httpClient.post(
-          'workspace',
-          {...form.value, "isCompany": workspace?.isCompnay},
+          'workspace/invite-teammate',
+          {...form.value},
         );
 
         if (response.statusCode == 201) {
           var body = jsonEncode(response.body);
           debugPrint('workspace: $body');
           ref.read(loadingProvider.notifier).state = false;
-          navigateToInviteTeammate();
+          navigateToDashboard();
         } else {
           debugPrint('status code: ${response.statusCode}');
           ref.read(loadingProvider.notifier).state = false;
         }
       } catch (e) {
-        debugPrint("Error creating workspace ${e.toString()}");
+        debugPrint("Error inviting teammates ${e.toString()}");
         ref.read(loadingProvider.notifier).state = false;
       }
     }

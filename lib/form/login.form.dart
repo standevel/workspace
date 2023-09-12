@@ -138,6 +138,13 @@ class LoginForm extends HookConsumerWidget {
           // Obtain shared preferences.
           final SharedPreferences prefs = await SharedPreferences.getInstance();
           prefs.setString(tokenName, token);
+          setLoggedIn(true);
+          setUser(user);
+
+// save user object to db
+
+          print('saved user: ');
+          // }
 
           navigateToDashboard();
         } else {
@@ -158,6 +165,7 @@ class LoginForm extends HookConsumerWidget {
 
           ScaffoldMessenger.of(context).showSnackBar(
             CustomSnackBar(
+              color: Colors.red,
               message: 'Authorization failed! Invalid email or password',
               iconData: Icons.info, // Specify the icon you want
               onClose: () {
