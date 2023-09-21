@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:http/http.dart' as http;
+import 'package:peersync/model/team.dart';
 import 'package:peersync/widgets/plain_rounded_textfield.dart';
 import 'package:peersync/widgets/submit_button.dart';
 import 'package:reactive_forms/reactive_forms.dart';
@@ -12,6 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../constants.dart';
 import '../model/user.dart';
+import '../model/workspace.dart';
 import '../providers/provider.dart';
 import '../widgets/custom-snackbar.dart';
 
@@ -107,7 +109,7 @@ class LoginForm extends HookConsumerWidget {
           var user = body['user'];
           var token = body['access_token'];
 
-          debugPrint('user: $user');
+          // debugPrint('user: $user');
           debugPrint('access_token: $token');
 
           // CherryToast.info(
@@ -118,14 +120,28 @@ class LoginForm extends HookConsumerWidget {
           // ).show(context);
 
           ref.read(tokenProvider.notifier).state = token;
-          ref.read(userProvider.notifier).state = User(
-              firstName: user['firstName'].toString(),
-              lastName: user['lastName'].toString(),
-              email: user['email'],
-              workspaces: user['workspaces'],
-              createdAt: DateTime.parse(user['createdAt']),
-              updatedAt: DateTime.parse(user['updatedAt']),
-              id: user['id']); //body['user'];
+          ref.read(userProvider.notifier).state = User.fromJson(user);
+          // var activeWorkspace = user['workspaces'][0];
+          var workspacesList = user['workspaces'] as List<dynamic>;
+          print('workspace list: $workspacesList');
+          var workspaces = workspacesList
+              .map((workspace) => Workspace.fromJson(workspace))
+              .toList();
+          ref.read(workspacesProvider.notifier).state = workspaces;
+          var workspace = workspaces.elementAt(0);
+
+          final List<dynamic> teamDataList = workspace.teams!;
+          final List<Team> teamsData =
+              teamDataList.map((team) => Team.fromJson(team)).toList();
+
+          ref.read(teamsProvider.notifier).state = teamsData;
+
+          var worksp = ref.read(workspaceProvider.notifier).state = workspace;
+
+          var teams = ref.read(teamsProvider);
+
+          print('active workspace: $worksp teams: $teams');
+
           ScaffoldMessenger.of(context).showSnackBar(
             CustomSnackBar(
               message: 'Authorized!',

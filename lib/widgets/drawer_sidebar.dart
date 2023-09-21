@@ -10,9 +10,9 @@ class sideDrawer extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var userPro = ref.watch(userProvider);
-    var workspaces = userPro?.workspaces?.toList();
-    print('workspaces: ${workspaces?.length}');
+    var workspaces = ref.watch(workspacesProvider);
+    // var workspaces = userPro?.workspaces?.toList();
+    print('workspaces: ${workspaces?.toList()}');
     return Drawer(
       child: ListView(
         children: [
@@ -46,13 +46,15 @@ class sideDrawer extends HookConsumerWidget {
               final workspace = workspaces?[index];
 
               return Tooltip(
-                message: workspace['name'],
+                message: workspace!.name,
                 child: ListTile(
                   leading: CircleAvatar(
-                    backgroundImage: NetworkImage(workspace['logoUrl']),
-                    child: Text(workspace['name'][0]),
+                    backgroundImage: workspace.logoUrl != null
+                        ? NetworkImage(workspace.logoUrl!, scale: 1)
+                        : null,
+                    child: Text(workspace.name!.toString().substring(0, 1)),
                   ),
-                  title: Text(workspace['name']),
+                  title: Text(workspace.name!),
                   onTap: () {
                     // Handle tapping on a workspace item
                   },

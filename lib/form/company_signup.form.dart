@@ -22,6 +22,7 @@ class CompanyForm extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    var isProcessing = ref.watch(loadingProvider);
     return ReactiveForm(
       formGroup: form,
       child: Padding(
@@ -86,6 +87,10 @@ class CompanyForm extends HookConsumerWidget {
             const SizedBox(
               height: 16,
             ),
+            if (isProcessing)
+              const CircularProgressIndicator(
+                color: white,
+              )
             // TextButton(
             //   onPressed: () {
             //     Navigator.of(context).pushNamed('/login');
@@ -122,6 +127,7 @@ class CompanyForm extends HookConsumerWidget {
   }
 
   void _submitForm(WidgetRef ref) async {
+    ref.read(loadingProvider.notifier).state = true;
     print('sign up clicked');
     if (form.valid) {
       try {
@@ -136,17 +142,14 @@ class CompanyForm extends HookConsumerWidget {
           ref.read(tokenProvider.notifier).state = token;
         }
         if (user != null) {
-          ref.read(userProvider.notifier).state = User(
-              email: user['email'],
-              firstName: user['firstName'],
-              lastName: user['lastName'],
-              id: user['id'],
-              workspaces: user['workspaces']);
+          ref.read(userProvider.notifier).state = User.fromJson(user);
+          ref.read(loadingProvider.notifier).state = false;
           navigateToCreateWorkspace();
         }
         print('Sign up form is valid');
       } catch (e) {
         debugPrint('company signup error: ${e.toString()}');
+        ref.read(loadingProvider.notifier).state = false;
       }
     }
   }

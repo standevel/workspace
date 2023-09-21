@@ -109,6 +109,7 @@ class TeamMembersInviteForm extends ConsumerWidget {
 
   void _submitForm(BuildContext context, WidgetRef ref, FormGroup form) async {
     ref.read(loadingProvider.notifier).state = true;
+    var workspace = ref.read(workspaceProvider);
     var token = ref.read(tokenProvider);
     if (token == '' || token == 'null') {
       token = await checkUserToken();
@@ -129,7 +130,11 @@ class TeamMembersInviteForm extends ConsumerWidget {
       try {
         var response = await httpClient.post(
           'workspace/invite-teammate',
-          {...form.value},
+          {
+            ...form.value,
+            "workspace": workspace!.name,
+            "workspaceId": workspace.id
+          },
         );
 
         if (response.statusCode == 201) {

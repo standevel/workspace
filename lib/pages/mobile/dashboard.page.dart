@@ -24,15 +24,18 @@ class DashboardPage extends HookConsumerWidget {
               } else {
                 if (snapshot.hasData && snapshot.data != null) {
                   return Row(children: [
-                    const Flexible(
-                      flex: 2,
-                      child: VerticalMenu(),
+                    Container(
+                        constraints: const BoxConstraints(maxWidth: 100.0),
+                        child: const VerticalMenu()),
+                    Flexible(
+                      flex: 1,
+                      child: Container(
+                        constraints: const BoxConstraints(
+                            minWidth: 300.0, maxWidth: 350.0), // Minimum width
+                        child: MenuList(),
+                      ),
                     ),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    Flexible(flex: 4, child: MenuList()),
-                    const Expanded(flex: 17, child: Text('Dashboard page')),
+                    const Expanded(child: Text('Dashboard page')),
                   ]);
                 } else {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -46,3 +49,5 @@ class DashboardPage extends HookConsumerWidget {
             }));
   }
 }
+
+// chat section color : F0F0F0F0

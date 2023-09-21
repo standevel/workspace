@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:peersync/constants.dart';
 import 'package:peersync/providers/provider.dart';
 
 class VerticalMenu extends HookConsumerWidget {
@@ -7,6 +8,7 @@ class VerticalMenu extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    var workspace = ref.watch(workspaceProvider)!;
     return Container(
       color: Theme.of(context).shadowColor,
       child: Column(
@@ -15,16 +17,20 @@ class VerticalMenu extends HookConsumerWidget {
           Container(
             padding: const EdgeInsets.all(16.0),
             // color: Colors.blue,
-            child: const Column(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Image(
-                  image: AssetImage('assets/images/peersync.png'),
-                  // width: 100.0,
-                  // height: 100.0,
-                  fit: BoxFit.fitWidth,
-                ),
-                SizedBox(height: 8.0),
+                workspace.logoUrl != null
+                    ? Image.network(
+                        workspace.logoUrl!,
+                        scale: 1,
+                        fit: BoxFit.fitWidth,
+                      )
+                    : Text(
+                        workspace.name!,
+                        style: const TextStyle(fontSize: 18.0, color: white),
+                      ),
+                const SizedBox(height: 8.0),
                 // Text(
                 //   "Peer Sync",
                 //   style: TextStyle(

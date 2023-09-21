@@ -7,6 +7,7 @@ import 'package:peersync/widgets/submit_button.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
 import '../constants.dart';
+import '../model/workspace.dart';
 import '../providers/provider.dart';
 import '../utils/custom_httpclient.dart';
 
@@ -28,8 +29,8 @@ class CreateWorkspaceForm extends ConsumerWidget {
         child: Column(
           children: [
             RoundedPlainTextField(
-                formControlName: 'workspace',
-                value: workspace?.workspace.toString(),
+                formControlName: 'name',
+                value: workspace?.name.toString(),
                 // validationMessages: (control) => {
                 //   ValidationMessage.required: 'Workspace name is required.',
                 // },
@@ -115,7 +116,7 @@ class CreateWorkspaceForm extends ConsumerWidget {
 
   FormGroup createForm(dynamic workspace) {
     return fb.group({
-      'workspace': FormControl<String>(
+      'name': FormControl<String>(
         value: workspace?.workspace?.toString(),
         validators: [Validators.required],
       ),
@@ -148,13 +149,14 @@ class CreateWorkspaceForm extends ConsumerWidget {
       try {
         var response = await httpClient.post(
           'workspace',
-          {...form.value, "isCompany": workspace?.isCompnay},
+          {...form.value, "isCompany": workspace?.isCompany},
         );
 
         if (response.statusCode == 201) {
-          var body = jsonEncode(response.body);
+          var body = jsonDecode(response.body);
           debugPrint('workspace: $body');
           ref.read(loadingProvider.notifier).state = false;
+          ref.read(workspaceProvider.notifier).state = Workspace.fromJson(body);
           navigateToInviteTeammate();
         } else {
           debugPrint('status code: ${response.statusCode}');
