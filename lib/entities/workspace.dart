@@ -1,30 +1,28 @@
-import 'package:isar/isar.dart';
-import 'user.dart';
+// import 'package:objectbox/objectbox.dart';
+// import 'user.dart';
 
-import 'company.dart';
-import 'team.dart';
+// import 'company.dart';
+// import 'team.dart';
 
-// part 'workspace.g.dart';
+// // part 'workspace.g.dart';
 
-@Collection()
-class Workspace {
-  Id? workspaceId = Isar.autoIncrement;
-  String? id;
-  String? workspace;
-  bool? isCompnay;
-  String? description;
-  final companyId = IsarLink<Company>();
-  final createdBy = IsarLink<User>();
+// @Entity()
+// class Workspace {
+//   @Id()
+//   int workspaceId = 0;
+//   @Index()
+//   String? id;
+//   bool? isCompnay;
+//   String? description;
+//   String? companyId;
+//   String? createdBy;
+//   final teams = ToMany<Team>();
+//   // final workspace = ToMany<Workspace>();
+//   final members = ToMany<User>();
+// }
 
-  // @Backlink(to: 'workspceId')
-  final teams = IsarLinks<Team>();
+// // @Backlink(to: 'workspaceId')
+// // final teams = IsarLinks<Team>();
 
-  @Backlink(to: 'workspaces')
-  final members = IsarLinks<User>();
-}
-
-// @Backlink(to: 'workspaceId')
-// final teams = IsarLinks<Team>();
-
-// @Backlink(to: 'workspaces')
-// final members = IsarLinks<User>();
+// // @Backlink(to: 'workspaces')
+// // final members = IsarLinks<User>();

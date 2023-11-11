@@ -1,0 +1,151 @@
+// {
+//   "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+//   "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+//   "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+//   "entities": [
+//     {
+//       "id": "1:7560421510361941626",
+//       "lastPropertyId": "6:9200896800848835464",
+//       "name": "User",
+//       "properties": [
+//         {
+//           "id": "1:9024467617279900782",
+//           "name": "userId",
+//           "type": 6,
+//           "flags": 1
+//         },
+//         {
+//           "id": "2:1592341009510992416",
+//           "name": "id",
+//           "type": 9
+//         },
+//         {
+//           "id": "3:3746368638169990735",
+//           "name": "firstName",
+//           "type": 9
+//         },
+//         {
+//           "id": "4:8358637324826007909",
+//           "name": "lastName",
+//           "type": 9
+//         },
+//         {
+//           "id": "5:5211284127865475827",
+//           "name": "email",
+//           "type": 9
+//         },
+//         {
+//           "id": "6:9200896800848835464",
+//           "name": "phone",
+//           "type": 9
+//         }
+//       ],
+//       "relations": [
+//         {
+//           "id": "2:8382597697527774694",
+//           "name": "workspaces",
+//           "targetId": "3:8749320673848119770"
+//         }
+//       ]
+//     },
+//     {
+//       "id": "2:3730110646854400294",
+//       "lastPropertyId": "4:1049564349002358851",
+//       "name": "Team",
+//       "properties": [
+//         {
+//           "id": "1:5093946561277003133",
+//           "name": "teamId",
+//           "type": 6,
+//           "flags": 1
+//         },
+//         {
+//           "id": "2:4835483812593468431",
+//           "name": "name",
+//           "type": 9
+//         },
+//         {
+//           "id": "3:6420939739298673546",
+//           "name": "description",
+//           "type": 9
+//         },
+//         {
+//           "id": "4:1049564349002358851",
+//           "name": "workspaceIdId",
+//           "type": 11,
+//           "flags": 520,
+//           "indexId": "1:7669178977202487080",
+//           "relationTarget": "Workspace"
+//         }
+//       ],
+//       "relations": [
+//         {
+//           "id": "1:399681517602216536",
+//           "name": "members",
+//           "targetId": "1:7560421510361941626"
+//         }
+//       ]
+//     },
+//     {
+//       "id": "3:8749320673848119770",
+//       "lastPropertyId": "6:1932286751397290151",
+//       "name": "Workspace",
+//       "properties": [
+//         {
+//           "id": "1:1650464994151717770",
+//           "name": "workspaceId",
+//           "type": 6,
+//           "flags": 1
+//         },
+//         {
+//           "id": "2:4735565075641810427",
+//           "name": "id",
+//           "type": 9
+//         },
+//         {
+//           "id": "3:2336494306579709141",
+//           "name": "isCompnay",
+//           "type": 1
+//         },
+//         {
+//           "id": "4:7299537442646065233",
+//           "name": "description",
+//           "type": 9
+//         },
+//         {
+//           "id": "5:136332692672543324",
+//           "name": "companyId",
+//           "type": 9
+//         },
+//         {
+//           "id": "6:1932286751397290151",
+//           "name": "createdBy",
+//           "type": 9
+//         }
+//       ],
+//       "relations": [
+//         {
+//           "id": "3:3661519713061364606",
+//           "name": "teams",
+//           "targetId": "2:3730110646854400294"
+//         },
+//         {
+//           "id": "4:7769945196623108093",
+//           "name": "members",
+//           "targetId": "1:7560421510361941626"
+//         }
+//       ]
+//     }
+//   ],
+//   "lastEntityId": "3:8749320673848119770",
+//   "lastIndexId": "1:7669178977202487080",
+//   "lastRelationId": "4:7769945196623108093",
+//   "lastSequenceId": "0:0",
+//   "modelVersion": 5,
+//   "modelVersionParserMinimum": 5,
+//   "retiredEntityUids": [],
+//   "retiredIndexUids": [],
+//   "retiredPropertyUids": [],
+//   "retiredRelationUids": [],
+//   "version": 1
+// }
