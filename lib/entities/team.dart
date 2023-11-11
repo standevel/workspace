@@ -1,15 +1,22 @@
+<<<<<<< HEAD
+=======
+// import 'package:objectbox/objectbox.dart';
+>>>>>>> 6278e5815fd23005ad0a965bc539bd3c480b5db7
 
-// part 'team.g.dart';
+// import '../objectbox.g.dart';
+// import 'workspace.dart';
+// import 'user.dart';
 
-class Team {
-  String? name;
-  String? description;
-  // @Backlink(to: 'teams')
-  // final workspaceId = IsarLink<Workspace>();
+// // part 'team.g.dart';
+// @Entity()
+// class Team {
+//   @Id()
+//   int teamId = 0;
+//   String? name;
+//   String? description;
+//   @Index()
+//   String? id;
+//   final workspaceId = ToOne<Workspace>();
 
-  // @Link(target: Workspace)
-  // late final IsarLink<Workspace> workspace;
-
-  // @Backlink(to: 'teams')
-  // final members = IsarLinks<User>();
-}
+//   final members = ToMany<User>();
+// }

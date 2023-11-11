@@ -7,10 +7,10 @@ const white = Colors.white;
 const tokenName = 'peersync_user_token';
 
 Future<String> checkUserToken() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String userToken = prefs.getString(tokenName)!;
-  prefs.clear();
-  return userToken;
+  // SharedPreferences prefs = await SharedPreferences.getInstance();
+  // String userToken = prefs.getString(tokenName)!;
+  // prefs.clear();
+  return 'true';
 }
 
 Future<void> setLoggedIn(bool isLoggedIn) async {

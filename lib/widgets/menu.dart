@@ -83,12 +83,26 @@ class MenuList extends HookConsumerWidget {
                 // Display public channels here
                 var channel = workspace.publicChannels!.elementAt(index);
                 return ListTile(
-                  title: Text(
-                    channel['name']!,
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 18.0,
-                    ),
+                  title: Row(
+                    children: [
+                      const Text(
+                        '#',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 18.0,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 2.0,
+                      ),
+                      Text(
+                        channel['name']!,
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 18.0,
+                        ),
+                      ),
+                    ],
                   ),
                   // Handle channel item tap
                   onTap: () {
@@ -174,12 +188,26 @@ class _CustomDropdownItemState extends State<CustomDropdownItem> {
           Column(
             children: widget.team.channels!.map((channel) {
               return ListTile(
-                title: Text(
-                  channel['name']!,
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 18.0,
-                  ),
+                title: Row(
+                  children: [
+                    const Text(
+                      '#',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18.0,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 2.0,
+                    ),
+                    Text(
+                      channel['name']!,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 18.0,
+                      ),
+                    ),
+                  ],
                 ),
                 // Handle channel item tap
                 onTap: () {

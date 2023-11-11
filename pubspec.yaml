@@ -36,7 +36,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   socket_io_client: ^2.0.2
-  omni_jitsi_meet: ^1.0.14 
+  # omni_jitsi_meet: ^1.0.14 
   reactive_forms: ^16.0.2
   hooks_riverpod: ^2.3.7
   http: ^1.1.0
@@ -47,8 +47,8 @@ dependencies:
   # isar: ^3.1.0+1
   # isar_flutter_libs: ^3.1.0+1 
   shared_preferences: ^2.2.1
-  objectbox: ^2.2.1
-  objectbox_generator: ^2.2.1
+  # objectbox: ^2.2.1
+  # objectbox_flutter_libs: any
   # flutter_hooks: ^0.20.0
   
 
@@ -64,7 +64,8 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
-  isar_generator: ^3.1.0+1
+  # objectbox_generator: ^2.2.1
+  # isar_generator: ^3.1.0+1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

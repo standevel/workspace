@@ -1,16 +1,27 @@
+<<<<<<< HEAD
+=======
+// import 'package:objectbox/objectbox.dart';
+>>>>>>> 6278e5815fd23005ad0a965bc539bd3c480b5db7
 
-// part 'user.g.dart';
+// import 'team.dart';
+// import 'workspace.dart';
 
-class User {
-  String? userId;
-  String? firstName;
-  String? lastName;
-  String? email;
-  String? phone;
+// // part 'user.g.dart';
 
-  // @Link(target: Team)
-  // final teams = IsarLinks<Team>();
+// @Entity()
+// class User {
+//   @Id()
+//   int userId = 0;
+//   @Index()
+//   String? id;
+//   String? firstName;
+//   String? lastName;
+//   String? email;
+//   String? phone;
+//   final workspaces = ToMany<Workspace>();
+//   // @Link(target: Team)
+//   // final teams = IsarLinks<Team>();
 
-  // @Link(target: Workspace)
-  // final workspaces = IsarLinks<Workspace>();
-}
+//   // @Link(target: Workspace)
+//   // final workspaces = IsarLinks<Workspace>();
+// }

@@ -10,7 +10,7 @@ import 'package:peersync/widgets/plain_rounded_textfield.dart';
 import 'package:peersync/widgets/submit_button.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import '../entities/user.dart' as UserEntity;
 import '../constants.dart';
 import '../model/user.dart';
 import '../model/workspace.dart';
@@ -104,6 +104,9 @@ class LoginForm extends HookConsumerWidget {
         print('body: ${response.statusCode}');
         if (response.statusCode == 200) {
           var body = jsonDecode(response.body);
+
+// save user to objectbox
+          // final userBox = store.box<UserEntity>();
 
           // debugPrint('workspace: $body');
           var user = body['user'];
