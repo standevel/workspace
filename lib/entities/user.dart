@@ -1,5 +1,3 @@
-import 'team.dart';
-import 'workspace.dart';
 
 // part 'user.g.dart';
 

@@ -3,7 +3,6 @@ import 'package:peersync/constants.dart';
 import 'package:peersync/form/login.form.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'dashboard.page.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:peersync/constants.dart';
 import 'package:peersync/form/user.form.dart';
 import 'package:peersync/pages/desktop/signup.page.dart';
 

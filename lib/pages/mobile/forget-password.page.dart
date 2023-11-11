@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:peersync/form/forget_password.form.dart';
-import 'package:peersync/form/login.form.dart';
 
 class ForgotPasswordPage extends StatelessWidget {
   const ForgotPasswordPage({super.key});

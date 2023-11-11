@@ -1,5 +1,4 @@
-import 'channel.dart';
-import 'user.dart'; // Assuming you have a User class defined
+// Assuming you have a User class defined
 
 class Team {
   String? name;

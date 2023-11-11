@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:peersync/constants.dart';
-import '../../model/workspace.dart';
-import '../../providers/provider.dart';
 import '../../utils/responsive.utils.dart';
 
 class SignupPage extends HookConsumerWidget {

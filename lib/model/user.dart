@@ -1,4 +1,3 @@
-import 'package:peersync/model/workspace.dart';
 
 class User {
   final String email;
