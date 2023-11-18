@@ -7,13 +7,24 @@ import 'package:peersync/pages/mobile/login.page.dart';
 import 'package:peersync/pages/mobile/signup.page.dart';
 import 'package:peersync/pages/mobile/workspace.page.dart';
 import 'package:peersync/pages/verify-email.page.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 import 'pages/invite_teammates.page.dart';
-import 'pages/mobile/dashboard.page.dart';
+import 'pages/desktop/dashboard.page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  IO.Socket socket = IO.io('http://localhost:3000/chat');
 
+  socket.onConnect((_) {
+    print('connect ${socket.id}');
+    socket.emit('message', 'test');
+  });
+  socket.on('message', (data) => print('Message from server: $data'));
+  socket.emitWithAck('message', {'message': 'message from flutter client'},
+      ack: (response) => {print('response $response')});
+  socket.onDisconnect((_) => print('disconnect'));
+  socket.on('fromServer', (_) => print(_));
   runApp(ProviderScope(child: MyApp()));
 }
 
@@ -34,7 +45,7 @@ class MyApp extends StatelessWidget {
         '/personal-signup': (context) => const IndividualSignUpPage(),
         '/login': (context) => const LoginPage(),
         '/create-workspace': (context) => const CreateWorkspacePage(),
-        "/dashboard": (context) => const DashboardPage(),
+        "/dashboard": (context) => DashboardPage(),
         "/verify-email": (context) => const VerifyEmailPage(),
         "/invite-teammates": (context) => const InviteTeammatesPage()
         // Add other named routes for your pages here...

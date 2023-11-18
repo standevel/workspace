@@ -6,8 +6,8 @@ import '../../constants.dart';
 import '../../widgets/drawer_sidebar.dart';
 import '../../widgets/menu.dart';
 
-class DashboardPage extends HookConsumerWidget {
-  const DashboardPage({super.key});
+class DashboardMobilePage extends HookConsumerWidget {
+  const DashboardMobilePage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

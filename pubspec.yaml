@@ -35,7 +35,7 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  socket_io_client: ^2.0.2
+  socket_io_client: ^2.0.3+1
   # omni_jitsi_meet: ^1.0.14 
   reactive_forms: ^16.0.2
   hooks_riverpod: ^2.3.7
