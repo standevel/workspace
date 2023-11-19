@@ -125,25 +125,25 @@ class LoginForm extends HookConsumerWidget {
           ref.read(tokenProvider.notifier).state = token;
           ref.read(userProvider.notifier).state = User.fromJson(user);
           // var activeWorkspace = user['workspaces'][0];
-          var workspacesList = user['workspaces'] as List<dynamic>;
-          print('workspace list: $workspacesList');
-          var workspaces = workspacesList
-              .map((workspace) => Workspace.fromJson(workspace))
-              .toList();
-          ref.read(workspacesProvider.notifier).state = workspaces;
-          var workspace = workspaces.elementAt(0);
+          // var workspacesList = user['workspaces'] as List<dynamic>;
+          // print('workspace list: $workspacesList');
+          // var workspaces = workspacesList
+          //     .map((workspace) => Workspace.fromJson(workspace))
+          //     .toList();
+          // ref.read(workspacesProvider.notifier).state = workspaces;
+          // var workspace = workspaces.elementAt(0);
 
-          final List<dynamic> teamDataList = workspace.teams!;
-          final List<Team> teamsData =
-              teamDataList.map((team) => Team.fromJson(team)).toList();
+          // final List<dynamic> teamDataList = workspace.teams!;
+          // final List<Team> teamsData =
+          //     teamDataList.map((team) => Team.fromJson(team)).toList();
 
-          ref.read(teamsProvider.notifier).state = teamsData;
+          // ref.read(teamsProvider.notifier).state = teamsData;
 
-          var worksp = ref.read(workspaceProvider.notifier).state = workspace;
+          // var worksp = ref.read(workspaceProvider.notifier).state = workspace;
 
-          var teams = ref.read(teamsProvider);
+          // var teams = ref.read(teamsProvider);
 
-          print('active workspace: $worksp teams: $teams');
+          // print('active workspace: $worksp teams: $teams');
 
           ScaffoldMessenger.of(context).showSnackBar(
             CustomSnackBar(
@@ -157,9 +157,11 @@ class LoginForm extends HookConsumerWidget {
           // Obtain shared preferences.
           final SharedPreferences prefs = await SharedPreferences.getInstance();
           prefs.setString(tokenName, token);
+
           setLoggedIn(true);
           setUser(user);
-
+          // setActiveWorkspace(workspacesList.elementAt(0));
+          // setWorkspaceList(workspacesList);
 // save user object to db
 
           print('saved user: ');

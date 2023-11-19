@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:peersync/constants.dart';
 import 'package:peersync/model/user.dart';
 import 'package:peersync/model/workspace.dart';
 import 'package:peersync/services/account.service.dart';
@@ -12,7 +13,49 @@ import '../model/team.dart';
 final companyProvider = StateProvider<Company?>((ref) => null);
 final userProvider = StateProvider<User?>((ref) => null);
 final workspaceProvider = StateProvider<Workspace?>((ref) => null);
-final workspacesProvider = StateProvider<List<Workspace>?>((ref) => null);
+
+final workspacesProvider = FutureProvider<List<Workspace>?>((ref) async {
+  print('get workspaces process started...');
+  var pref = await SharedPreferences.getInstance();
+  var token = pref.getString(tokenName);
+  print('token to apply $token');
+  var userString = pref.getString('user');
+  print('user string $userString');
+  var foundWorkspacesString = pref.getString('workspaces');
+
+  token ??= ref.read(tokenProvider);
+  // user ??= ref.read(userProvider);
+  // print('user id: $user token: $token');
+  AccountService accountService = AccountService();
+  print(' account service has been initialized ');
+  final response = await accountService.getUserDetails(token!);
+  print(' get user data status: ${response.statusCode}');
+  if (response.statusCode == 200) {
+    var body = jsonDecode(response.body);
+
+    var workspaces = body['workspaces'] as List<dynamic>;
+    pref.setString('workspaces', workspaces.toString());
+    if (body['activeWorkspace'] != null) {
+      ref.read(workspaceProvider.notifier).state =
+          Workspace.fromJson(body['activeWorkspace'] as dynamic);
+    } else {
+      ref.read(workspaceProvider.notifier).state =
+          Workspace.fromJson(workspaces.elementAt(0));
+    }
+    final List<dynamic> teamDataList =
+        ref.read(workspaceProvider)!.teams!.toList();
+    final List<Team> teamsData =
+        teamDataList.map((team) => Team.fromJson(team)).toList();
+
+    ref.read(teamsProvider.notifier).state = teamsData;
+
+    return workspaces
+        .map((workspace) => Workspace.fromJson(workspace))
+        .toList();
+  } else {
+    return null;
+  }
+});
 
 final tokenProvider = StateProvider<String>((ref) => '');
 final loadingProvider = StateProvider((ref) => false);

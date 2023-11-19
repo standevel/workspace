@@ -27,4 +27,12 @@ class AccountService {
 
     return response;
   }
+
+  Future<http.Response> getUserDetails(String token) async {
+    print('getting user workspaces: ');
+    var httpClient = CustomHttpClient(bearerToken: token);
+    var response = await httpClient.get('account/user-details');
+    print('user details: ${response.body}');
+    return response;
+  }
 }

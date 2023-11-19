@@ -1,62 +1,62 @@
-import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:peersync/widgets/vertical_menu.dart';
-// ignore: library_prefixes
-import 'package:socket_io_client/socket_io_client.dart' as IO;
-import '../../constants.dart';
-import '../../widgets/drawer_sidebar.dart';
-import '../../widgets/menu.dart';
+// import 'package:flutter/material.dart';
+// import 'package:hooks_riverpod/hooks_riverpod.dart';
+// import 'package:peersync/widgets/vertical_menu.dart';
+// // ignore: library_prefixes
+// import 'package:socket_io_client/socket_io_client.dart' as IO;
+// import '../../constants.dart';
+// import '../../widgets/drawer_sidebar.dart';
+// import '../../widgets/menu.dart';
 
-class DashboardPage extends HookConsumerWidget {
-  IO.Socket socket = IO.io('http://localhost:3000/chat');
+// class DashboardPage extends HookConsumerWidget {
+//   IO.Socket socket = IO.io('http://localhost:3000/chat');
 
-  DashboardPage({super.key});
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    socket.connect().onConnect((_) {
-      print('connect');
-      socket.emit('message', {
-        'type': 'JOIN_CHANNEL',
-        'data': {'userId': '1', 'channelId': '3132'}
-      });
-    });
-    return Scaffold(
-        appBar: AppBar(),
-        drawer: const sideDrawer(),
-        body: FutureBuilder<String>(
-            future: checkUserToken(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              } else {
-                if (snapshot.hasData && snapshot.data != null) {
-                  return Row(children: [
-                    Container(
-                        constraints: const BoxConstraints(maxWidth: 100.0),
-                        child: const VerticalMenu()),
-                    Flexible(
-                      flex: 1,
-                      child: Container(
-                        constraints: const BoxConstraints(
-                            minWidth: 300.0, maxWidth: 350.0), // Minimum width
-                        child: MenuList(),
-                      ),
-                    ),
-                    const Expanded(child: Text('Dashboard page')),
-                  ]);
-                } else {
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    Navigator.pushNamed(context, '/login');
-                  });
-                  return const Center(
-                    child: Text('Redirecting to login...'),
-                  );
-                }
-              }
-            }));
-  }
-}
+//   DashboardPage({super.key});
+//   @override
+//   Widget build(BuildContext context, WidgetRef ref) {
+//     socket.connect().onConnect((_) {
+//       print('connect');
+//       socket.emit('message', {
+//         'type': 'JOIN_CHANNEL',
+//         'data': {'userId': '1', 'channelId': '3132'}
+//       });
+//     });
+//     return Scaffold(
+//         appBar: AppBar(),
+//         drawer: const sideDrawer(),
+//         body: FutureBuilder<String>(
+//             future: checkUserToken(),
+//             builder: (context, snapshot) {
+//               if (snapshot.connectionState == ConnectionState.waiting) {
+//                 return const Center(
+//                   child: CircularProgressIndicator(),
+//                 );
+//               } else {
+//                 if (snapshot.hasData && snapshot.data != null) {
+//                   return Row(children: [
+//                     Container(
+//                         constraints: const BoxConstraints(maxWidth: 100.0),
+//                         child: const VerticalMenu()),
+//                     Flexible(
+//                       flex: 1,
+//                       child: Container(
+//                         constraints: const BoxConstraints(
+//                             minWidth: 300.0, maxWidth: 350.0), // Minimum width
+//                         child: MenuList(),
+//                       ),
+//                     ),
+//                     const Expanded(child: Text('Dashboard page')),
+//                   ]);
+//                 } else {
+//                   WidgetsBinding.instance.addPostFrameCallback((_) {
+//                     Navigator.pushNamed(context, '/login');
+//                   });
+//                   return const Center(
+//                     child: Text('Redirecting to login...'),
+//                   );
+//                 }
+//               }
+//             }));
+//   }
+// }
 
-// chat section color : F0F0F0F0
+// // chat section color : F0F0F0F0

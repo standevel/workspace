@@ -1,30 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:peersync/constants.dart';
 import 'package:peersync/pages/desktop/home.page.dart';
 import 'package:peersync/pages/mobile/conpany_signup.dart';
+import 'package:peersync/pages/mobile/dashboard.mobile.page.dart';
 import 'package:peersync/pages/mobile/individual_signup.page.dart';
 import 'package:peersync/pages/mobile/login.page.dart';
 import 'package:peersync/pages/mobile/signup.page.dart';
 import 'package:peersync/pages/mobile/workspace.page.dart';
 import 'package:peersync/pages/verify-email.page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+// ignore: library_prefixes
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 import 'pages/invite_teammates.page.dart';
 import 'pages/desktop/dashboard.page.dart';
+import 'providers/socket_manager.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  IO.Socket socket = IO.io('http://localhost:3000/chat');
+  // IO.Socket socket = IO.io('http://localhost:3000/chat');
 
-  socket.onConnect((_) {
-    print('connect ${socket.id}');
-    socket.emit('message', 'test');
+  // socket.onConnect((_) {
+  //   print('connect ${socket.id}');
+  //   socket.emit('message', 'test');
+  // });
+  // socket.on('message', (data) => print('Message from server: $data'));
+  // socket.emitWithAck('message', {'message': 'message from flutter client'},
+  //     ack: (response) => {print('response $response')});
+  // socket.onDisconnect((_) => print('disconnect'));
+  // socket.on('fromServer', (_) => print(_));
+
+  SharedPreferences.getInstance().then((prefs) {
+    var token = prefs.getString(tokenName);
+    if (token != null) {
+      // Instantiate the socket manager
+      SocketManager socketManager = SocketManager();
+
+// Connect to the Socket.IO server
+      socketManager.connect(); // Initialize SocketManager if logged in
+    }
   });
-  socket.on('message', (data) => print('Message from server: $data'));
-  socket.emitWithAck('message', {'message': 'message from flutter client'},
-      ack: (response) => {print('response $response')});
-  socket.onDisconnect((_) => print('disconnect'));
-  socket.on('fromServer', (_) => print(_));
+
   runApp(ProviderScope(child: MyApp()));
 }
 
@@ -45,7 +62,7 @@ class MyApp extends StatelessWidget {
         '/personal-signup': (context) => const IndividualSignUpPage(),
         '/login': (context) => const LoginPage(),
         '/create-workspace': (context) => const CreateWorkspacePage(),
-        "/dashboard": (context) => DashboardPage(),
+        "/dashboard": (context) => DashboardMobilePage(),
         "/verify-email": (context) => const VerifyEmailPage(),
         "/invite-teammates": (context) => const InviteTeammatesPage()
         // Add other named routes for your pages here...
