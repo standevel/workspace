@@ -209,6 +209,8 @@ class UserForm extends ConsumerWidget {
               email: form.value['email'].toString(),
               password: 'password',
               id: refUser['id'],
+              createdAt: refUser['createdAt'],
+              profileImageUrl: refUser['profileImageUrl'],
               // firstName: form.value['name'].toString().split(' ')[0],
               // lastName: form.value['name'].toString().split(' ')[1],
               // phone: '',

@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:peersync/constants.dart';
+import 'package:peersync/enums/event_type.enum.dart';
+import 'package:peersync/pages/dashboard.page.dart';
 import 'package:peersync/pages/desktop/home.page.dart';
+import 'package:peersync/pages/mobile/call.mobile.dart';
+import 'package:peersync/pages/mobile/chat.mobile.dart';
 import 'package:peersync/pages/mobile/conpany_signup.dart';
 import 'package:peersync/pages/mobile/dashboard.mobile.page.dart';
 import 'package:peersync/pages/mobile/individual_signup.page.dart';
@@ -19,26 +23,19 @@ import 'providers/socket_manager.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // IO.Socket socket = IO.io('http://localhost:3000/chat');
 
-  // socket.onConnect((_) {
-  //   print('connect ${socket.id}');
-  //   socket.emit('message', 'test');
-  // });
-  // socket.on('message', (data) => print('Message from server: $data'));
-  // socket.emitWithAck('message', {'message': 'message from flutter client'},
-  //     ack: (response) => {print('response $response')});
-  // socket.onDisconnect((_) => print('disconnect'));
-  // socket.on('fromServer', (_) => print(_));
-
-  SharedPreferences.getInstance().then((prefs) {
+  SharedPreferences.getInstance().then((prefs) async {
+    // prefs.clear();
     var token = prefs.getString(tokenName);
     if (token != null) {
       // Instantiate the socket manager
+      var user = await getUser();
       SocketManager socketManager = SocketManager();
-
+      socketManager.socket.on(EVENT, (data) {
+        // print('event data: $data');
+      });
 // Connect to the Socket.IO server
-      socketManager.connect(); // Initialize SocketManager if logged in
+      socketManager.connect(user.id!); // Initialize SocketManager if logged in
     }
   });
 
@@ -55,14 +52,22 @@ class MyApp extends StatelessWidget {
       theme: darkTheme,
       title: 'Peer Sync',
       initialRoute: '/',
+      onGenerateRoute: (settings) {
+        // Implement route generation logic here
+        return MaterialPageRoute(
+          builder: (context) => const TeamDashboardMobilePage(),
+        );
+      },
       routes: {
         '/': (context) => const HomePage(),
+        '/chat': (context) => ChatPage(),
+        '/call': (context) => CallPage(),
         '/signup': (context) => const SignupPage(),
         '/company-signup': (context) => const CompanySignUpPage(),
         '/personal-signup': (context) => const IndividualSignUpPage(),
         '/login': (context) => const LoginPage(),
         '/create-workspace': (context) => const CreateWorkspacePage(),
-        "/dashboard": (context) => DashboardMobilePage(),
+        "/dashboard": (context) => const TeamDashboardDesktopPage(),
         "/verify-email": (context) => const VerifyEmailPage(),
         "/invite-teammates": (context) => const InviteTeammatesPage()
         // Add other named routes for your pages here...
@@ -80,17 +85,17 @@ class MyApp extends StatelessWidget {
     // Customize the background color
     scaffoldBackgroundColor:
         Colors.blueGrey[900], // Customize the background color
-    textTheme: const TextTheme(
-      displayLarge: TextStyle(
-          fontSize: 30.0, color: Colors.white), // Customize text styles
-      bodyLarge: TextStyle(fontSize: 16.0, color: Colors.white),
-      labelLarge: TextStyle(color: Colors.greenAccent),
-      labelMedium: TextStyle(color: Colors.white),
-      labelSmall: TextStyle(color: Colors.white),
-      titleLarge: TextStyle(color: Colors.white),
-      titleMedium: TextStyle(color: Colors.white),
-      titleSmall: TextStyle(color: Colors.white),
-    ),
+    // textTheme: const TextTheme(
+    //   displayLarge: TextStyle(
+    //       fontSize: 30.0, color: Colors.white), // Customize text styles
+    //   bodyLarge: TextStyle(fontSize: 16.0, color: Colors.white),
+    // labelLarge: TextStyle(color: Colors.greenAccent),
+    // labelMedium: TextStyle(color: Colors.white),
+    // labelSmall: TextStyle(color: Colors.white),
+    // titleLarge: TextStyle(color: Colors.white),
+    // titleMedium: TextStyle(color: Colors.white),
+    // titleSmall: TextStyle(color: Colors.white),
+    // ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(
         padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
@@ -112,6 +117,6 @@ class MyApp extends StatelessWidget {
     textTheme: const TextTheme(
       bodyLarge: TextStyle(color: Color(0xFF333333)),
     ),
-    colorScheme: const ColorScheme.light(background: Color(0xFFF1FAEE)),
+    // colorScheme: const ColorScheme.light(background: Color(0xFFF1FAEE)),
   );
 }

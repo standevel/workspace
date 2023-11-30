@@ -3,8 +3,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:peersync/constants.dart';
 import 'package:peersync/providers/provider.dart';
 
-class VerticalMenu extends HookConsumerWidget {
-  const VerticalMenu({super.key});
+class HorizontalMenu extends HookConsumerWidget {
+  const HorizontalMenu({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -15,38 +15,32 @@ class VerticalMenu extends HookConsumerWidget {
     var workspace = ref.watch(workspaceProvider)!;
     return Container(
       color: Theme.of(context).shadowColor,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+      child: Row(
+        // crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Container(
-            padding: const EdgeInsets.only(top: 16.0),
-            // color: Colors.blue,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                workspace.logoUrl != null
-                    ? Image.network(
-                        workspace.logoUrl!,
-                        scale: 1,
-                        fit: BoxFit.fitWidth,
-                      )
-                    : Text(
-                        workspace.name!,
-                        style: const TextStyle(fontSize: 18.0, color: white),
-                      ),
-                const SizedBox(height: 8.0),
-                // Text(
-                //   "Peer Sync",
-                //   style: TextStyle(
-                //     color: Colors.white,
-                //     fontSize: 12,
-                //     fontWeight: FontWeight.bold,
-                //   ),
-                // ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 20.0),
+          // Container(
+          //   padding: const EdgeInsets.all(16.0),
+          //   // color: Colors.blue,
+          //   child: Column(
+          //     crossAxisAlignment: CrossAxisAlignment.center,
+          //     children: [
+          //       workspace.logoUrl != null
+          //           ? Image.network(
+          //               workspace.logoUrl!,
+          //               scale: 1,
+          //               fit: BoxFit.fitWidth,
+          //             )
+          //           : Text(
+          //               workspace.name!,
+          //               style: const TextStyle(fontSize: 18.0, color: white),
+          //             ),
+          //       const SizedBox(height: 8.0),
+
+          //     ],
+          //   ),
+          // ),
+
+          const SizedBox(width: 20.0),
           MenuItem(
             icon: Icons.group,
             title: "Teams/People",

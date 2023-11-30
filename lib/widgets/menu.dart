@@ -1,7 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:peersync/enums/event_type.enum.dart';
 import 'package:peersync/providers/provider.dart';
+import 'package:peersync/providers/socket_manager.dart';
+import 'package:peersync/utils/enum_encoder.dart';
 
+import '../model/channel.dart';
+import '../model/event_payload.dart';
 import '../model/team.dart';
 
 class MenuList extends HookConsumerWidget {
@@ -26,93 +33,96 @@ class MenuList extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    SocketManager manager = SocketManager();
     var teams = ref.read(teamsProvider)!;
+    List<String> channelIds = [];
+
     var workspace = ref.read(workspaceProvider)!;
-    return Card(
-      color: Colors.grey[300],
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Icon(
-                  Icons.people,
-                  color: Theme.of(context).shadowColor,
-                ),
-                const SizedBox(
-                  width: 4.0,
-                ),
-                const Expanded(
-                  child: Text(
-                    'Your Teams',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20.0,
-                    ),
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(
+                Icons.people,
+                color: Theme.of(context).shadowColor,
+              ),
+              const SizedBox(
+                width: 4.0,
+              ),
+              const Expanded(
+                child: Text(
+                  'Your Teams',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20.0,
                   ),
                 ),
-                TextButton(
-                  child: const Row(
-                    children: [Icon(Icons.add), Text('New Team')],
-                  ),
-                  onPressed: () => {print('new team button clicked')},
-                )
-              ],
-            ),
+              ),
+              TextButton(
+                child: const Row(
+                  children: [Icon(Icons.add), Text('New Team')],
+                ),
+                onPressed: () => {print('new team button clicked')},
+              )
+            ],
           ),
-          ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: teams.length,
-            itemBuilder: (context, index) {
-              final team = teams.elementAt(index);
-              return CustomDropdownItem(
+        ),
+        ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: teams.length,
+          itemBuilder: (context, index) {
+            final team = teams.elementAt(index);
+            return CustomDropdownItem(
                 team: team, // Adjust to match your data structure
-                dropdownItems:
-                    dropdownItems, // Adjust to match your data structure
+                dropdownItems: dropdownItems,
+                ref: ref // Adjust to match your data structure
+                );
+          },
+        ),
+        if (workspace.publicChannels != null &&
+            workspace.publicChannels!.isNotEmpty)
+          ListView.builder(
+            shrinkWrap: true, // Adjust as needed
+            itemCount: workspace.publicChannels!.length,
+            itemBuilder: (context, index) {
+              // Display public channels here
+              var channel = workspace.publicChannels!.elementAt(index);
+              return ListTile(
+                title: Row(
+                  children: [
+                    const Text(
+                      '#',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18.0,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 2.0,
+                    ),
+                    Text(
+                      channel['name']!,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 18.0,
+                      ),
+                    ),
+                  ],
+                ),
+                // Handle channel item tap
+                onTap: () {
+                  // You can use 'channel' here to access channel details
+                  ref.read(activeChannelProvider.notifier).state =
+                      Channel.fromJson(channel);
+                },
               );
             },
           ),
-          if (workspace.publicChannels != null &&
-              workspace.publicChannels!.isNotEmpty)
-            ListView.builder(
-              shrinkWrap: true, // Adjust as needed
-              itemCount: workspace.publicChannels!.length,
-              itemBuilder: (context, index) {
-                // Display public channels here
-                var channel = workspace.publicChannels!.elementAt(index);
-                return ListTile(
-                  title: Row(
-                    children: [
-                      const Text(
-                        '#',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 18.0,
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 2.0,
-                      ),
-                      Text(
-                        channel['name']!,
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 18.0,
-                        ),
-                      ),
-                    ],
-                  ),
-                  // Handle channel item tap
-                  onTap: () {
-                    // You can use 'channel' here to access channel details
-                  },
-                );
-              },
-            ),
-        ],
-      ),
+      ],
     );
     // : const Text('You have not been added to a team yet');
   }
@@ -121,12 +131,12 @@ class MenuList extends HookConsumerWidget {
 class CustomDropdownItem extends StatefulWidget {
   final Team team;
   final List<Map<String, dynamic>> dropdownItems;
-
-  const CustomDropdownItem({
-    super.key,
-    required this.team,
-    required this.dropdownItems,
-  });
+  final WidgetRef ref;
+  const CustomDropdownItem(
+      {super.key,
+      required this.team,
+      required this.dropdownItems,
+      required this.ref});
 
   @override
   _CustomDropdownItemState createState() => _CustomDropdownItemState();
@@ -143,7 +153,7 @@ class _CustomDropdownItemState extends State<CustomDropdownItem> {
         InkWell(
           onHover: (value) => {
             setState(() {
-              print('hover value: $value');
+              // print('hover value: $value');
               showAdd = value;
             })
           },
@@ -211,6 +221,9 @@ class _CustomDropdownItemState extends State<CustomDropdownItem> {
                 ),
                 // Handle channel item tap
                 onTap: () {
+                  // print('selected channel: $channel');
+                  widget.ref.read(activeChannelProvider.notifier).state =
+                      Channel.fromJson(channel);
                   // You can use 'channel' here to access channel details
                 },
               );

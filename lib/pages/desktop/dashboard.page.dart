@@ -1,62 +1,70 @@
-// import 'package:flutter/material.dart';
-// import 'package:hooks_riverpod/hooks_riverpod.dart';
-// import 'package:peersync/widgets/vertical_menu.dart';
-// // ignore: library_prefixes
-// import 'package:socket_io_client/socket_io_client.dart' as IO;
-// import '../../constants.dart';
-// import '../../widgets/drawer_sidebar.dart';
-// import '../../widgets/menu.dart';
+import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:peersync/enums/event_type.enum.dart';
+import 'package:peersync/providers/socket_manager.dart';
 
-// class DashboardPage extends HookConsumerWidget {
-//   IO.Socket socket = IO.io('http://localhost:3000/chat');
+import '../../providers/provider.dart';
+import '../../utils/event_handler.dart';
+import '../../widgets/channel.dart';
+import '../../widgets/drawer_sidebar.dart';
+import '../../widgets/menu.dart';
+import '../../widgets/vertical_menu.dart';
 
-//   DashboardPage({super.key});
-//   @override
-//   Widget build(BuildContext context, WidgetRef ref) {
-//     socket.connect().onConnect((_) {
-//       print('connect');
-//       socket.emit('message', {
-//         'type': 'JOIN_CHANNEL',
-//         'data': {'userId': '1', 'channelId': '3132'}
-//       });
-//     });
-//     return Scaffold(
-//         appBar: AppBar(),
-//         drawer: const sideDrawer(),
-//         body: FutureBuilder<String>(
-//             future: checkUserToken(),
-//             builder: (context, snapshot) {
-//               if (snapshot.connectionState == ConnectionState.waiting) {
-//                 return const Center(
-//                   child: CircularProgressIndicator(),
-//                 );
-//               } else {
-//                 if (snapshot.hasData && snapshot.data != null) {
-//                   return Row(children: [
-//                     Container(
-//                         constraints: const BoxConstraints(maxWidth: 100.0),
-//                         child: const VerticalMenu()),
-//                     Flexible(
-//                       flex: 1,
-//                       child: Container(
-//                         constraints: const BoxConstraints(
-//                             minWidth: 300.0, maxWidth: 350.0), // Minimum width
-//                         child: MenuList(),
-//                       ),
-//                     ),
-//                     const Expanded(child: Text('Dashboard page')),
-//                   ]);
-//                 } else {
-//                   WidgetsBinding.instance.addPostFrameCallback((_) {
-//                     Navigator.pushNamed(context, '/login');
-//                   });
-//                   return const Center(
-//                     child: Text('Redirecting to login...'),
-//                   );
-//                 }
-//               }
-//             }));
-//   }
-// }
+class TeamDashboardDesktopPage extends HookConsumerWidget {
+  const TeamDashboardDesktopPage({Key? key}) : super(key: key);
 
-// // chat section color : F0F0F0F0
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final workspacesAsyncValue = ref.watch(workspacesProvider);
+    SocketManager manager = SocketManager();
+    manager.socket.on(EVENT, (payload) {
+      handleEvent(payload);
+    });
+    return Scaffold(
+      appBar: AppBar(),
+      drawer: const sideDrawer(),
+      body: workspacesAsyncValue.when(
+        data: (workspaces) {
+          return Card(
+            color: Colors.white,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Container(
+                  constraints: const BoxConstraints(
+                    maxWidth: 100.0,
+                  ),
+                  child: const VerticalMenu(),
+                ),
+                Expanded(
+                  child: Container(
+                    decoration: BoxDecoration(color: Colors.grey[300]),
+                    constraints: const BoxConstraints(
+                      minWidth: 300.0,
+                      maxWidth: 350.0,
+                    ),
+                    child: MenuList(),
+                  ),
+                ),
+                Expanded(
+                  flex: 3,
+                  child: ChannelWidget(),
+                ),
+              ],
+            ),
+          );
+        },
+        loading: () {
+          return const Center(
+            child: CircularProgressIndicator(
+              color: Colors.white,
+            ),
+          );
+        },
+        error: (error, stackTrace) {
+          return Center(child: Text('Error: $error'));
+        },
+      ),
+    );
+  }
+}

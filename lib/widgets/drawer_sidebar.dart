@@ -49,7 +49,7 @@ class sideDrawer extends HookConsumerWidget {
                   final workspace = workspaces[index];
 
                   return Tooltip(
-                    message: workspace!.name,
+                    message: workspace.name,
                     child: ListTile(
                       leading: CircleAvatar(
                         backgroundImage: workspace.logoUrl != null

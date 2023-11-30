@@ -5,6 +5,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:peersync/providers/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'model/user.dart';
+
 const api =
     'http://localhost:3000/api/v1'; // 'https://workspace-api.onrender.com/api/v1'; //;
 const chatUrl =
@@ -34,14 +36,19 @@ Future<void> setLoggedIn(bool isLoggedIn) async {
   await prefs.setBool('isLoggedIn', isLoggedIn);
 }
 
-Future<dynamic> setUser(dynamic user) async {
+setUser(dynamic user) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  await prefs.setString('user', user.toString());
+  await prefs.setString('user', jsonEncode(user));
 }
 
-getUser() async {
+Future<User> getUser() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  return prefs.get('user');
+  var userString = prefs.getString('user');
+  // print('userString $userString');
+  var userJson = jsonDecode(userString!);
+  // print('userJson: $userJson');
+  User user = User.fromJson(userJson);
+  return user;
 }
 
 // Retrieving login status

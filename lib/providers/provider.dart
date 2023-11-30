@@ -2,17 +2,29 @@ import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:peersync/constants.dart';
+import 'package:peersync/model/channel.dart';
+import 'package:peersync/model/message.dart';
 import 'package:peersync/model/user.dart';
 import 'package:peersync/model/workspace.dart';
 import 'package:peersync/services/account.service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../enums/event_type.enum.dart';
 import '../model/company.dart';
+import '../model/event_payload.dart';
 import '../model/team.dart';
+import 'socket_manager.dart';
 
 final companyProvider = StateProvider<Company?>((ref) => null);
 final userProvider = StateProvider<User?>((ref) => null);
 final workspaceProvider = StateProvider<Workspace?>((ref) => null);
+final activeChannelProvider = StateProvider<Channel>((ref) => Channel(
+    description: '',
+    id: '',
+    name: '',
+    members: [],
+    teamId: '',
+    workspaceId: ''));
 
 final workspacesProvider = FutureProvider<List<Workspace>?>((ref) async {
   print('get workspaces process started...');
@@ -48,6 +60,31 @@ final workspacesProvider = FutureProvider<List<Workspace>?>((ref) async {
         teamDataList.map((team) => Team.fromJson(team)).toList();
 
     ref.read(teamsProvider.notifier).state = teamsData;
+    List<String> channelIds = [];
+    if (teamsData.isNotEmpty) {
+      teamsData.forEach((e) {
+        e.channels?.forEach((element) {
+          channelIds.add(element['id']);
+        });
+      });
+      print('channel Ids: $channelIds');
+    }
+    if (ref.read(workspaceProvider)!.publicChannels!.isNotEmpty) {
+      ref.read(workspaceProvider)!.publicChannels?.forEach((element) {
+        channelIds.add(element['id']);
+      });
+    }
+    if (channelIds.isNotEmpty) {
+      String event = EventType.JOIN_CHANNELS.name.toString();
+
+      // Convert using the custom encoder
+      var payload =
+          EventPayload(type: EventType.JOIN_CHANNELS, data: channelIds);
+      print('jsonEncoded event $event');
+      SocketManager manager = SocketManager();
+      manager.emitMessage(payload);
+    }
+    print('updated channel ids: $channelIds');
 
     return workspaces
         .map((workspace) => Workspace.fromJson(workspace))
@@ -81,3 +118,8 @@ final userTeamsProvider = FutureProvider<List<Team>>((ref) async {
   print('User Teams: $body');
   return body.map((teamData) => Team.fromJson(teamData)).toList();
 });
+
+final allMessagesProvider = StateProvider<List<Message>>((ref) => []);
+final activeChannelMessagesProvider = StateProvider<List<Message>>((ref) => []);
+final activeDMMessagesProvider = StateProvider<List<Message>>((ref) => []);
+final newMessageProvider = StateProvider<Message?>((ref) => null);
